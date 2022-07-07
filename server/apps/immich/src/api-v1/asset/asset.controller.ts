@@ -15,6 +15,7 @@ import {
   Delete,
   Logger,
   HttpCode,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../../modules/immich-jwt/guards/jwt-auth.guard';
 import { AssetService } from './asset.service';
@@ -31,6 +32,10 @@ import { SearchAssetDto } from './dto/search-asset.dto';
 import { CommunicationGateway } from '../communication/communication.gateway';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
+import { IAssetUploadedJob } from '@app/job/index';
+import { assetUploadedQueueName } from '@app/job/constants/queue-name.constant';
+import { assetUploadedProcessorName } from '@app/job/constants/job-name.constant';
+import { CheckDuplicateAssetDto } from './dto/check-duplicate-asset.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('asset')
@@ -40,8 +45,8 @@ export class AssetController {
     private assetService: AssetService,
     private backgroundTaskService: BackgroundTaskService,
 
-    @InjectQueue('asset-uploaded-queue')
-    private assetUploadedQueue: Queue,
+    @InjectQueue(assetUploadedQueueName)
+    private assetUploadedQueue: Queue<IAssetUploadedJob>,
   ) {}
 
   @Post('upload')
@@ -56,40 +61,23 @@ export class AssetController {
   )
   async uploadFile(
     @GetAuthUser() authUser: AuthUserDto,
-    @UploadedFiles() uploadFiles: { assetData: Express.Multer.File[]; thumbnailData?: Express.Multer.File[] },
+    @UploadedFiles() uploadFiles: { assetData: Express.Multer.File[] },
     @Body(ValidationPipe) assetInfo: CreateAssetDto,
   ): Promise<'ok' | undefined> {
     for (const file of uploadFiles.assetData) {
       try {
         const savedAsset = await this.assetService.createUserAsset(authUser, assetInfo, file.path, file.mimetype);
 
-        if (!savedAsset) {
-          return;
-        }
-        if (uploadFiles.thumbnailData != null) {
-          const assetWithThumbnail = await this.assetService.updateThumbnailInfo(
-            savedAsset,
-            uploadFiles.thumbnailData[0].path,
-          );
-
+        if (savedAsset) {
           await this.assetUploadedQueue.add(
-            'asset-uploaded',
-            { asset: assetWithThumbnail, fileName: file.originalname, fileSize: file.size, hasThumbnail: true },
-            { jobId: savedAsset.id },
-          );
-
-          this.wsCommunicateionGateway.server
-            .to(savedAsset.userId)
-            .emit('on_upload_success', JSON.stringify(assetWithThumbnail));
-        } else {
-          await this.assetUploadedQueue.add(
-            'asset-uploaded',
-            { asset: savedAsset, fileName: file.originalname, fileSize: file.size, hasThumbnail: false },
+            assetUploadedProcessorName,
+            { asset: savedAsset, fileName: file.originalname, fileSize: file.size },
             { jobId: savedAsset.id },
           );
         }
       } catch (e) {
-        Logger.error(`Error receiving upload file ${e}`);
+        Logger.error(`Error uploading file ${e}`);
+        throw new BadRequestException(`Error uploading file`, `${e}`);
       }
     }
 
@@ -116,7 +104,7 @@ export class AssetController {
   }
 
   @Get('/thumbnail/:assetId')
-  async getAssetThumbnail(@Param('assetId') assetId: string): Promise<StreamableFile> {
+  async getAssetThumbnail(@Param('assetId') assetId: string) {
     return await this.assetService.getAssetThumbnail(assetId);
   }
 
@@ -185,9 +173,9 @@ export class AssetController {
   @HttpCode(200)
   async checkDuplicateAsset(
     @GetAuthUser() authUser: AuthUserDto,
-    @Body(ValidationPipe) { deviceAssetId }: { deviceAssetId: string },
+    @Body(ValidationPipe) checkDuplicateAssetDto: CheckDuplicateAssetDto,
   ) {
-    const res = await this.assetService.checkDuplicatedAsset(authUser, deviceAssetId);
+    const res = await this.assetService.checkDuplicatedAsset(authUser, checkDuplicateAssetDto);
 
     return {
       isExist: res,

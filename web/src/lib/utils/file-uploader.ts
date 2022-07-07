@@ -53,7 +53,7 @@ export async function fileUploader(asset: File, accessToken: string) {
 		// Check if asset upload on server before performing upload
 		const res = await fetch(serverEndpoint + '/asset/check', {
 			method: 'POST',
-			body: JSON.stringify({ deviceAssetId }),
+			body: JSON.stringify({ deviceAssetId, deviceId: 'WEB' }),
 			headers: {
 				Authorization: 'Bearer ' + accessToken,
 				'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export async function fileUploader(asset: File, accessToken: string) {
 		request.upload.onload = () => {
 			setTimeout(() => {
 				uploadAssetsStore.removeUploadAsset(deviceAssetId);
-			}, 2500);
+			}, 1000);
 		};
 
 		// listen for `error` event

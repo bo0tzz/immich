@@ -5,6 +5,7 @@ set -ex
 cd /home/ubuntu/immich
 sudo iptables -A INPUT -p tcp --dport 80 -j DROP
 
+docker-compose -f docker/docker-compose.yml pull
 docker-compose -f docker/docker-compose.yml down -v
 docker-compose -f docker/docker-compose.yml up -d immich-server
 

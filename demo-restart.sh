@@ -23,3 +23,5 @@ curl --location --request POST '127.0.0.1:3001/auth/admin-sign-up' \
 docker-compose -f docker/docker-compose.yml up -d
 
 sudo iptables -D INPUT -p tcp --dport 80 -j DROP
+
+docker run -it --rm -v $(pwd)/demo/library:/import ghcr.io/bo0tzz/immich-cli:main upload --email demo@immich.app --password demo --server https://demo.immich.app/api -d /import -y

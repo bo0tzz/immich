@@ -24,4 +24,4 @@ docker-compose -f docker/docker-compose.yml up -d
 
 sudo iptables -D INPUT -p tcp --dport 80 -j DROP
 
-docker run -it --rm -v $(pwd)/demo/library:/import ghcr.io/bo0tzz/immich-cli:main upload --email demo@immich.app --password demo --server https://demo.immich.app/api -d /import -y
+docker run --rm -v /home/ubuntu/immich/demo/library:/import ghcr.io/bo0tzz/immich-cli:main upload --email demo@immich.app --password demo --server https://demo.immich.app/api -d /import -y

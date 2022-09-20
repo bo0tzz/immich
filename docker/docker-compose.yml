@@ -89,6 +89,7 @@ services:
       - /home/ubuntu/immich/docker/caddy/Caddyfile:/etc/caddy/Caddyfile
       - /home/ubuntu/immich/docker/caddy/data:/data # Optional
       - /home/ubuntu/immich/docker/caddy/config:/config # Optional
+      - /home/ubuntu/immich/docker/caddy/logs:/logs # Optional
 
 volumes:
   pgdata:

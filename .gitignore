@@ -3,4 +3,5 @@
 .idea
 docker/caddy/config
 docker/caddy/data
+docker/caddy/logs
 demo/library

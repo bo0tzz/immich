@@ -1,10 +1,11 @@
 #!/bin/python3
 
-import argparse
+import json
 import os
 import random
 import subprocess
 import sys
+import urllib.request
 from itertools import groupby
 
 
@@ -21,10 +22,21 @@ def main():
     for _, _, files in os.walk(args.folder):
         for key, group in groupby(sorted(files), lambda x: x[0].lower()):
             grouped_files = map(lambda filename: os.path.join(args.folder, filename), group)
-            lat = round(random.uniform(-90, 90), 6)
-            long = round(random.uniform(-180, 180), 6)
+            (lat, long) = generate_location()
             for file in grouped_files:
                 add_gps(args.exiftool, file, lat, long)
+
+
+def generate_location():
+    while True:
+        lat = round(random.uniform(-90, 90), 6)
+        long = round(random.uniform(-180, 180), 6)
+        resp = json.load(urllib.request.urlopen(f'http://localhost:3000/geocode?latitude={lat}&longitude={long}'))
+        name = resp[0][0]['name']
+        dist = resp[0][0]['distance']
+        print([name, dist])
+        if dist < 10:
+            return lat, long
 
 
 def add_gps(exiftool, path, lat, long):

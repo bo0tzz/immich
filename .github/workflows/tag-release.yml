@@ -29,11 +29,11 @@ jobs:
           MINOR=$(echo $CURRENT_SERVER | cut -d '.' -f2)
           PATCH=$(echo $CURRENT_SERVER | cut -d '.' -f3)
 
-          if [[ $1 == "major" ]]; then
+          if [[ ${{ inputs.element }} == "major" ]]; then
             $((MAJOR++))
-          elif [[ $1 == "minor" ]]; then
+          elif [[ ${{ inputs.element }} == "minor" ]]; then
             $((MINOR++))
-          elif [[ $1 == "patch" ]]; then
+          elif [[ ${{ inputs.element }} == "patch" ]]; then
             $((PATCH++))
           else
             echo 'Expected <major|minor|patch>'

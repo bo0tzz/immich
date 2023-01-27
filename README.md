@@ -21,7 +21,7 @@
   <a href="README_zh_CN.md">中文</a>
 </p>
 
-THIS IS A TEST COMMIT
+THIS IS A TEST COMMIT :)
 
 ## Disclaimer
 

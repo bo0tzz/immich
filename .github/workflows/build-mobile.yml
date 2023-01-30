@@ -40,4 +40,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: release-apk-signed
-          path: mobile/build/app/outputs/apk/release/app-release-signed.apk
+          path: mobile/build/app/outputs/apk/release/app-release-unsigned.apk

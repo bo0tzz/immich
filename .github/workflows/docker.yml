@@ -18,14 +18,14 @@ jobs:
         context: [server, web, machine-learning, nginx]
         platforms: ["linux/arm/v7,linux/amd64,linux/arm64"]
         include:
-          - context: "server"
+          - context: server
             image: "immich-server"
-          - context: "web"
+          - context: web
             image: "immich-web"
-          - context: "machine-learning"
+          - context: machine-learning
             image: "immich-machine-learning"
             platforms: "linux/amd64"
-          - context: "nginx"
+          - context: nginx
             image: "immich-proxy"
 
     steps:

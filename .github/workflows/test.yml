@@ -162,7 +162,7 @@ jobs:
           key: avd-29
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2.27.0
+        uses: reactivecircus/android-emulator-runner@v2.28.0
         with:
           working-directory: ./mobile
           cores: 2
@@ -183,7 +183,7 @@ jobs:
       - name: Run integration tests
         uses: Wandalen/wretry.action@master
         with:
-          action: reactivecircus/android-emulator-runner@v2.27.0
+          action: reactivecircus/android-emulator-runner@v2.28.0
           with: |
             working-directory: ./mobile
             cores: 2

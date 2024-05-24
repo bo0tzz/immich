@@ -73,7 +73,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const json = ```${{ needs.checks.outputs.parameters }}```;
+            const json = `${{ needs.checks.outputs.parameters }}`;
             const parameters = JSON.parse(json);
             core.setOutput("event", parameters.event);
             core.setOutput("name", parameters.name);

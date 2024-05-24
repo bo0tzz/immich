@@ -79,7 +79,7 @@ jobs:
             core.setOutput("shouldDeploy", parameters.shouldDeploy);
       
       - run: |
-          echo Starting docs deployment for ${{ steps.parameters.outputs.name }} (trigger: ${{ steps.parameters.outputs.event }}
+          echo "Starting docs deployment for ${{ steps.parameters.outputs.name }} (trigger: ${{ steps.parameters.outputs.event }})"
       # TODO: Download docs build artifact
       # TODO: Terraform shenanigans
       # TODO: Comment URL on PR

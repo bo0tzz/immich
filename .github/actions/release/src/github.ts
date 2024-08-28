@@ -74,7 +74,9 @@ export class GithubRepoClient {
   async updatePrBranch(pull_number: number) {
     const resp = await this.client.rest.pulls.updateBranch({
       ...this.repo,
-      pull_number
+      pull_number,
+      //hack: This field is not documented but does apparently work (https://github.com/tibdex/auto-update/issues/25)
+      update_method: 'rebase'
     })
     return resp.data
   }

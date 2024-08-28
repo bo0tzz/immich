@@ -8,7 +8,7 @@ export async function handlePush(context: ActionContext) {
   core.debug(`Created branch: ${JSON.stringify(branch)}`)
   const pr = await ensurePR(context)
   core.debug(`Created pr: ${JSON.stringify(pr)}`)
-  return await ensureUpdated(context, pr!.id)
+  return await ensureUpdated(context, pr!.number)
 }
 
 async function ensureBranch(context: ActionContext) {
@@ -47,7 +47,7 @@ async function ensurePR(context: ActionContext) {
   return pull
 }
 
-async function ensureUpdated(context: ActionContext, id: number) {
-  core.info(`Updating release PR ${id}`)
-  return await context.client.updatePrBranch(id)
+async function ensureUpdated(context: ActionContext, pr: number) {
+  core.info(`Updating release PR ${pr}`)
+  return await context.client.updatePrBranch(pr)
 }

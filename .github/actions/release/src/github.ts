@@ -21,9 +21,9 @@ export class GithubRepoClient {
 
   async getBranch(branchName: string) {
     try {
-      const branch = await this.client.rest.git.getRef({
+      const branch = await this.client.rest.repos.getBranch({
         ...this.repo,
-        ref: `heads/${branchName}`
+        branch: branchName
       })
       return branch.data
     } catch (e) {
@@ -43,11 +43,12 @@ export class GithubRepoClient {
     return branch.data
   }
 
-  async createBranchFromMain(branchName: string) {
-    const main = await this.getBranch(MAIN_BRANCH)
-    const sha = main!.object.sha
-
-    return await this.createBranch(branchName, sha)
+  async createCommit(params: { tree: string; message: string; parents: string[] }) {
+    const commit = await this.client.rest.git.createCommit({
+      ...this.repo,
+        ...params
+    })
+    return commit.data
   }
 
   async getPullFromBranch(branchName: string) {

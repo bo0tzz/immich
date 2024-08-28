@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import { ActionContext } from 'src/context'
-import { PR_BODY, PR_TITLE, RELEASE_BRANCH } from 'src/constants'
+import { MAIN_BRANCH, PR_BODY, PR_TITLE, RELEASE_BRANCH } from 'src/constants'
 
 export async function handlePush(context: ActionContext) {
   core.info('Reconciling release PR')
@@ -13,7 +13,20 @@ async function ensureBranch(context: ActionContext) {
   let branch = await context.client.getBranch(RELEASE_BRANCH)
   if (!branch) {
     core.info('No branch found, creating release branch.')
-    branch = await context.client.createBranchFromMain(RELEASE_BRANCH)
+    const main = await context.client.getBranch(MAIN_BRANCH)
+
+    const commit = await context.client.createCommit({
+      message: "placeholder release commit",
+      tree: main!.commit.commit.tree.sha,
+      parents: [
+        main!.commit.sha
+      ]
+    })
+
+    await context.client.createBranch(RELEASE_BRANCH, commit.sha)
+
+    // The return type of createBranch is not assignable to branch, and I don't want to deal with it.
+    branch = await context.client.getBranch(RELEASE_BRANCH)
   }
   return branch
 }
@@ -28,7 +41,7 @@ async function ensurePR(context: ActionContext) {
       title: PR_TITLE,
       draft: true
     })
-    // The return type of createPullFromBranch is not assignable to pull, and I don't want to deal with it.
+    // Return type not assignable
     pull = await context.client.getPullFromBranch(RELEASE_BRANCH)
   }
   return pull

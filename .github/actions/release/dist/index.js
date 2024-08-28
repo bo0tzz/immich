@@ -29370,7 +29370,7 @@ async function handlePush(context) {
     core.debug(`Created branch: ${JSON.stringify(branch)}`);
     const pr = await ensurePR(context);
     core.debug(`Created pr: ${JSON.stringify(pr)}`);
-    return await ensureUpdated(context, pr.id);
+    return await ensureUpdated(context, pr.number);
 }
 async function ensureBranch(context) {
     let branch = await context.client.getBranch(constants_1.RELEASE_BRANCH);
@@ -29403,9 +29403,9 @@ async function ensurePR(context) {
     }
     return pull;
 }
-async function ensureUpdated(context, id) {
-    core.info(`Updating release PR ${id}`);
-    return await context.client.updatePrBranch(id);
+async function ensureUpdated(context, pr) {
+    core.info(`Updating release PR ${pr}`);
+    return await context.client.updatePrBranch(pr);
 }
 
 

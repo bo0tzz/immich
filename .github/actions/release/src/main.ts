@@ -9,10 +9,13 @@ import { getActionContext, getInputs } from 'src/context'
  */
 export async function run(): Promise<void> {
   try {
+    core.debug('Running with debug logs enabled')
     const inputs = getInputs()
     const actionContext = getActionContext(inputs)
 
-    switch (github.context.eventName) {
+    const event = github.context.eventName
+    core.debug(`event: ${event}`)
+    switch (event) {
       case 'push':
         await handlePush(actionContext)
         break

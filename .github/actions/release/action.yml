@@ -1,0 +1,15 @@
+name: 'Immich release coordinator'
+description: 'Coordinates the release process for Immich'
+author: 'immich-app'
+
+# Define your inputs here.
+inputs: {}
+
+# Define your outputs here.
+outputs:
+  phase:
+    description: 'The current phase of the release process'
+
+runs:
+  using: node20
+  main: dist/index.js

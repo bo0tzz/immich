@@ -29366,8 +29366,10 @@ const core = __importStar(__nccwpck_require__(2186));
 const constants_1 = __nccwpck_require__(9042);
 async function handlePush(context) {
     core.info('Reconciling release PR');
-    await ensureBranch(context);
+    const branch = await ensureBranch(context);
+    core.debug(`Created branch: ${JSON.stringify(branch)}`);
     const pr = await ensurePR(context);
+    core.debug(`Created pr: ${JSON.stringify(pr)}`);
     return await ensureUpdated(context, pr.id);
 }
 async function ensureBranch(context) {
@@ -29402,7 +29404,7 @@ async function ensurePR(context) {
     return pull;
 }
 async function ensureUpdated(context, id) {
-    core.info('Updating release branch');
+    core.info(`Updating release PR ${id}`);
     return await context.client.updatePrBranch(id);
 }
 
@@ -29449,9 +29451,12 @@ const context_1 = __nccwpck_require__(8954);
  */
 async function run() {
     try {
+        core.debug('Running with debug logs enabled');
         const inputs = (0, context_1.getInputs)();
         const actionContext = (0, context_1.getActionContext)(inputs);
-        switch (github.context.eventName) {
+        const event = github.context.eventName;
+        core.debug(`event: ${event}`);
+        switch (event) {
             case 'push':
                 await (0, push_1.handlePush)(actionContext);
                 break;
@@ -29463,6 +29468,7 @@ async function run() {
     catch (error) {
         // Fail the workflow run if an error occurs
         if (error instanceof Error) {
+            core.error(error.stack || error);
             core.setFailed(error.message);
         }
     }

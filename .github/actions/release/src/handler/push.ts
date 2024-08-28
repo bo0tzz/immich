@@ -4,8 +4,10 @@ import { MAIN_BRANCH, PR_BODY, PR_TITLE, RELEASE_BRANCH } from 'src/constants'
 
 export async function handlePush(context: ActionContext) {
   core.info('Reconciling release PR')
-  await ensureBranch(context)
+  const branch = await ensureBranch(context)
+  core.debug(`Created branch: ${JSON.stringify(branch)}`)
   const pr = await ensurePR(context)
+  core.debug(`Created pr: ${JSON.stringify(pr)}`)
   return await ensureUpdated(context, pr!.id)
 }
 
@@ -46,6 +48,6 @@ async function ensurePR(context: ActionContext) {
 }
 
 async function ensureUpdated(context: ActionContext, id: number) {
-  core.info('Updating release branch')
+  core.info(`Updating release PR ${id}`)
   return await context.client.updatePrBranch(id)
 }

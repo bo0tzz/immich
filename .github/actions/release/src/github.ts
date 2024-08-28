@@ -59,7 +59,7 @@ export class GithubRepoClient {
     const pulls = await this.client.paginate(this.client.rest.pulls.list, {
       ...this.repo
     })
-    return pulls.find(p => p.head.ref == branchName)
+    return pulls.find(p => p.state == 'open' && p.head.ref == branchName)
   }
 
   async createPullFromBranch(parameters: CreatePullRequest) {

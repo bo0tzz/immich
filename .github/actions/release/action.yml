@@ -3,7 +3,11 @@ description: 'Coordinates the release process for Immich'
 author: 'immich-app'
 
 # Define your inputs here.
-inputs: {}
+inputs:
+  token:
+    description: 'The GitHub token used to manage the release'
+    required: false
+    default: ${{ github.token }}
 
 # Define your outputs here.
 outputs:

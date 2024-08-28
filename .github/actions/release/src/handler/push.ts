@@ -16,11 +16,9 @@ async function ensureBranch(context: ActionContext) {
     const main = await context.client.getBranch(MAIN_BRANCH)
 
     const commit = await context.client.createCommit({
-      message: "placeholder release commit",
+      message: 'placeholder release commit',
       tree: main!.commit.commit.tree.sha,
-      parents: [
-        main!.commit.sha
-      ]
+      parents: [main!.commit.sha]
     })
 
     await context.client.createBranch(RELEASE_BRANCH, commit.sha)

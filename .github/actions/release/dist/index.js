@@ -29277,9 +29277,9 @@ class GithubRepoClient {
     }
     async getBranch(branchName) {
         try {
-            const branch = await this.client.rest.git.getRef({
+            const branch = await this.client.rest.repos.getBranch({
                 ...this.repo,
-                ref: `heads/${branchName}`
+                branch: branchName
             });
             return branch.data;
         }
@@ -29298,10 +29298,12 @@ class GithubRepoClient {
         });
         return branch.data;
     }
-    async createBranchFromMain(branchName) {
-        const main = await this.getBranch(constants_1.MAIN_BRANCH);
-        const sha = main.object.sha;
-        return await this.createBranch(branchName, sha);
+    async createCommit(params) {
+        const commit = await this.client.rest.git.createCommit({
+            ...this.repo,
+            ...params
+        });
+        return commit.data;
     }
     async getPullFromBranch(branchName) {
         const pulls = await this.client.paginate(this.client.rest.pulls.list, {
@@ -29372,7 +29374,15 @@ async function ensureBranch(context) {
     let branch = await context.client.getBranch(constants_1.RELEASE_BRANCH);
     if (!branch) {
         core.info('No branch found, creating release branch.');
-        branch = await context.client.createBranchFromMain(constants_1.RELEASE_BRANCH);
+        const main = await context.client.getBranch(constants_1.MAIN_BRANCH);
+        const commit = await context.client.createCommit({
+            message: 'placeholder release commit',
+            tree: main.commit.commit.tree.sha,
+            parents: [main.commit.sha]
+        });
+        await context.client.createBranch(constants_1.RELEASE_BRANCH, commit.sha);
+        // The return type of createBranch is not assignable to branch, and I don't want to deal with it.
+        branch = await context.client.getBranch(constants_1.RELEASE_BRANCH);
     }
     return branch;
 }
@@ -29386,7 +29396,7 @@ async function ensurePR(context) {
             title: constants_1.PR_TITLE,
             draft: true
         });
-        // The return type of createPullFromBranch is not assignable to pull, and I don't want to deal with it.
+        // Return type not assignable
         pull = await context.client.getPullFromBranch(constants_1.RELEASE_BRANCH);
     }
     return pull;
@@ -29444,6 +29454,10 @@ async function run() {
         switch (github.context.eventName) {
             case 'push':
                 await (0, push_1.handlePush)(actionContext);
+                break;
+            case 'workflow_dispatch':
+                await (0, push_1.handlePush)(actionContext);
+                break;
         }
     }
     catch (error) {

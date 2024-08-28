@@ -14,11 +14,11 @@ export async function run(): Promise<void> {
 
     switch (github.context.eventName) {
       case 'push':
-        await handlePush(actionContext);
-        break;
+        await handlePush(actionContext)
+        break
       case 'workflow_dispatch':
-        await handlePush(actionContext);
-        break;
+        await handlePush(actionContext)
+        break
     }
   } catch (error) {
     // Fail the workflow run if an error occurs

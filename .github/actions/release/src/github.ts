@@ -43,10 +43,14 @@ export class GithubRepoClient {
     return branch.data
   }
 
-  async createCommit(params: { tree: string; message: string; parents: string[] }) {
+  async createCommit(params: {
+    tree: string
+    message: string
+    parents: string[]
+  }) {
     const commit = await this.client.rest.git.createCommit({
       ...this.repo,
-        ...params
+      ...params
     })
     return commit.data
   }

@@ -1,6 +1,8 @@
 on:
   check_suite:
     types: [completed]
+  workflow_run:
+    types: [completed]
 
 jobs:
   dump:

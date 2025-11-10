@@ -1,3 +1,7 @@
 {
-  ".": "v2.2.3"
+  "server": "v2.2.3",
+  "web": "v2.2.3",
+  "mobile": "v2.2.3",
+  "machine-learning": "v2.2.3",
+  "cli": "v2.2.3"
 }

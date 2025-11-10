@@ -2,51 +2,22 @@
   "bootstrap-sha": "28eb1bc13cfd4642fe90fd8cf724ba7acf94f675",
   "include-v-in-tag": true,
   "include-component-in-tag": false,
-  "pull-request-title-pattern": "chore: release ${version}",
+  "group-pull-request-title-pattern": "chore: release ${version}",
   "packages": {
-    ".": {
-      "extra-files": [
-        {
-          "type": "json",
-          "path": "server/package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "open-api/immich-openapi-specs.json",
-          "jsonpath": "$.info.version"
-        },
-        {
-          "type": "json",
-          "path": "open-api/typescript-sdk/package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "cli/package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "web/package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "e2e/package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "toml",
-          "path": "machine-learning/pyproject.toml",
-          "jsonpath": "$.project.version"
-        },
-        {
-          "type": "generic",
-          "path": "mobile/pubspec.yaml"
-        },
-        "mobile/android/fastlane/Fastfile"
-      ]
+    "server": {
+      "release-type": "node"
+    },
+    "web": {
+      "release-type": "node"
+    },
+    "mobile": {
+      "release-type": "dart"
+    },
+    "machine-learning": {
+      "release-type": "python"
+    },
+    "cli": {
+      "release-type": "node"
     }
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"

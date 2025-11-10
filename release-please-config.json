@@ -3,6 +3,8 @@
   "changelog-type": "github",
   "include-v-in-tag": true,
   "include-component-in-tag": false,
+  "changelog-type": "github",
+  "pull-request-title-pattern": "chore: release ${version}",
   "packages": {
     "server": {
       "release-type": "node"

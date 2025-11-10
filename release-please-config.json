@@ -2,23 +2,9 @@
   "bootstrap-sha": "28eb1bc13cfd4642fe90fd8cf724ba7acf94f675",
   "include-v-in-tag": true,
   "include-component-in-tag": false,
-  "group-pull-request-title-pattern": "chore: release ${version}",
+  "pull-request-title-pattern": "chore: release ${version}",
   "packages": {
-    "server": {
-      "release-type": "node"
-    },
-    "web": {
-      "release-type": "node"
-    },
-    "mobile": {
-      "release-type": "dart"
-    },
-    "machine-learning": {
-      "release-type": "python"
-    },
-    "cli": {
-      "release-type": "node"
-    }
+    ".": {}
   },
   "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json"
 }

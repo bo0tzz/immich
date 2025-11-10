@@ -13,6 +13,11 @@
         },
         {
           "type": "json",
+          "path": "open-api/immich-openapi-specs.json",
+          "jsonpath": "$.info.version"
+        },
+        {
+          "type": "json",
           "path": "open-api/typescript-sdk/package.json",
           "jsonpath": "$.version"
         },

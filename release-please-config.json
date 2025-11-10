@@ -5,19 +5,21 @@
   "group-pull-request-title-pattern": "chore: release ${version}",
   "packages": {
     "server": {
-      "release-type": "node"
+      "component": "server"
     },
     "web": {
-      "release-type": "node"
+      "component": "web"
     },
     "mobile": {
-      "release-type": "dart"
+      "release-type": "dart",
+      "component": "mobile"
     },
     "machine-learning": {
-      "release-type": "python"
+      "release-type": "python",
+      "component": "machine-learning"
     },
     "cli": {
-      "release-type": "node"
+      "component": "cli"
     }
   },
   "plugins": [

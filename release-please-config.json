@@ -36,11 +36,7 @@
           "path": "machine-learning/pyproject.toml",
           "jsonpath": "$.project.version"
         },
-        {
-          "type": "yaml",
-          "path": "mobile/pubspec.yaml",
-          "jsonpath": "$.version"
-        },
+        "mobile/pubspec.yaml",
         "mobile/android/fastlane/Fastfile"
       ]
     }
